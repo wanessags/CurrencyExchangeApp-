@@ -1,24 +1,15 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
-}
-
 .app {
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
+/* HEADER */
+
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .header h1 {
@@ -33,20 +24,24 @@ body {
   font-size: 16px;
 }
 
+/* CARDS */
+
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
 }
 
 .card h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
   font-size: 22px;
+  color: #0f172a;
 }
+
+/* CAMPOS */
 
 .field {
   display: flex;
@@ -57,24 +52,34 @@ body {
 
 .field label {
   margin-bottom: 8px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
   color: #334155;
 }
 
 .field input,
-.field select {
+.field select,
+.search-input,
+.sort-select,
+.period-select {
   width: 100%;
-  padding: 12px 14px;
+  min-height: 44px;
+  padding: 10px 12px;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
+  border-radius: 9px;
   background-color: #ffffff;
+  color: #0f172a;
+  font-size: 15px;
+  outline: none;
 }
 
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.search-input:focus,
+.sort-select:focus,
+.period-select:focus {
   border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .currency-row {
@@ -82,41 +87,147 @@ body {
   gap: 16px;
 }
 
+/* BOTÕES */
+
+.convert-button,
+.export-button {
+  border: none;
+  border-radius: 9px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
 .convert-button {
   width: 100%;
   padding: 14px;
-  border: none;
-  border-radius: 10px;
-  background-color: #2563eb;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
 }
 
-.convert-button:hover {
+.export-button {
+  margin-top: 20px;
+  padding: 12px 20px;
+}
+
+.convert-button:hover,
+.export-button:hover {
   background-color: #1d4ed8;
 }
+
+/* RESULTADO */
 
 .result-card {
   background-color: #eff6ff;
   border-color: #bfdbfe;
 }
 
-.result-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #2563eb;
-  margin-bottom: 8px;
+.result-card h2 {
+  color: #0f172a;
 }
 
-.result-card span {
+.result-value {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.exchange-rate {
+  margin: 10px 0 0;
   color: #64748b;
 }
 
-@media (max-width: 600px) {
+/* CABEÇALHO DE SEÇÃO */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.period-select {
+  width: auto;
+  min-width: 160px;
+}
+
+/* GRÁFICO */
+
+.chart-placeholder {
+  height: 280px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  background-color: #f8fafc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-placeholder p {
+  color: #64748b;
+}
+
+/* AÇÕES DA TABELA */
+
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.search-input {
+  width: 220px;
+}
+
+.sort-select {
+  width: 180px;
+}
+
+/* TABELA */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+  background-color: #f8fafc;
+  color: #334155;
+  font-size: 14px;
+}
+
+td {
+  color: #475569;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
   .app {
-    padding: 20px 14px;
+    padding: 24px 14px;
   }
 
   .header h1 {
@@ -128,7 +239,34 @@ body {
     gap: 0;
   }
 
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .period-select,
+  .search-input,
+  .sort-select {
+    width: 100%;
+  }
+
+  .table-actions {
+    flex-direction: column;
+  }
+
   .result-value {
     font-size: 22px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .chart-placeholder {
+    height: 220px;
+  }
+
+  .export-button {
+    width: 100%;
   }
 }
