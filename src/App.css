@@ -5,8 +5,6 @@
   padding: 40px 20px;
 }
 
-/* HEADER */
-
 .header {
   text-align: center;
   margin-bottom: 32px;
@@ -24,8 +22,6 @@
   font-size: 16px;
 }
 
-/* CARDS */
-
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -40,8 +36,6 @@
   font-size: 22px;
   color: #0f172a;
 }
-
-/* CAMPOS */
 
 .field {
   display: flex;
@@ -87,8 +81,6 @@
   gap: 16px;
 }
 
-/* BOTÕES */
-
 .convert-button,
 .export-button {
   border: none;
@@ -116,7 +108,10 @@
   background-color: #1d4ed8;
 }
 
-/* RESULTADO */
+.convert-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 .result-card {
   background-color: #eff6ff;
@@ -139,8 +134,6 @@
   color: #64748b;
 }
 
-/* CABEÇALHO DE SEÇÃO */
-
 .section-header {
   display: flex;
   align-items: center;
@@ -158,14 +151,11 @@
   min-width: 160px;
 }
 
-/* GRÁFICO */
-
 .chart-placeholder {
   height: 280px;
   border: 2px dashed #cbd5e1;
   border-radius: 12px;
   background-color: #f8fafc;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,7 +165,22 @@
   color: #64748b;
 }
 
-/* AÇÕES DA TABELA */
+.chart-container {
+  width: 100%;
+  min-height: 330px;
+  padding: 20px 10px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+.chart-title {
+  margin: 0 0 20px;
+  text-align: center;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
 
 .table-actions {
   display: flex;
@@ -189,8 +194,6 @@
 .sort-select {
   width: 180px;
 }
-
-/* TABELA */
 
 .table-container {
   width: 100%;
@@ -223,7 +226,19 @@ tbody tr:hover {
   background-color: #f8fafc;
 }
 
-/* MOBILE */
+.error-message {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.result-placeholder {
+  margin: 0;
+  color: #64748b;
+}
 
 @media (max-width: 700px) {
   .app {
@@ -266,21 +281,12 @@ tbody tr:hover {
     height: 220px;
   }
 
+  .chart-container {
+    min-height: 300px;
+    padding: 15px 5px 5px;
+  }
+
   .export-button {
     width: 100%;
-  }
-
-  .error-message {
-    margin: 0;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: #fef2f2;
-    color: #b91c1c;
-    font-weight: 600;
-  }
-
-  .result-placeholder {
-    margin: 0;
-    color: #64748b;
   }
 }

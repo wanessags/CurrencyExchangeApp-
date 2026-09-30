@@ -129,6 +129,8 @@ function App() {
         loading={loadingHistory}
         error={historyError}
         data={historyData}
+        fromCurrency={fromCurrency}
+        toCurrency={toCurrency}
       />
 
       <HistoryTable
