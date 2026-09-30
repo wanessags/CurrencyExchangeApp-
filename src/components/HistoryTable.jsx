@@ -1,4 +1,4 @@
-function HistoryTable({ data }) {
+function HistoryTable({ data, loading, fromCurrency, toCurrency }) {
   return (
     <section className="card">
       <div className="section-header">
@@ -10,34 +10,40 @@ function HistoryTable({ data }) {
           <select className="sort-select" defaultValue="date">
             <option value="date">Ordenar por data</option>
 
-            <option value="currency">Ordenar por moeda</option>
-
             <option value="rate">Ordenar por cotação</option>
           </select>
         </div>
       </div>
 
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Moeda</th>
-              <th>Cotação</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {data.map((item) => (
-              <tr key={`${item.date}-${item.currency}`}>
-                <td>{item.date}</td>
-                <td>{item.currency}</td>
-                <td>{item.rate}</td>
+      {loading ? (
+        <p>Carregando dados...</p>
+      ) : data.length === 0 ? (
+        <p>Não há dados históricos disponíveis.</p>
+      ) : (
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>De</th>
+                <th>Para</th>
+                <th>Cotação</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+
+            <tbody>
+              {data.map((item) => (
+                <tr key={`${item.date}-${item.base}-${item.quote}`}>
+                  <td>{item.date}</td>
+                  <td>{fromCurrency}</td>
+                  <td>{toCurrency}</td>
+                  <td>{Number(item.rate).toFixed(4)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <button className="export-button">Exportar CSV</button>
     </section>

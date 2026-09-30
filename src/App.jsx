@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 import Header from "./components/Header";
@@ -11,7 +11,10 @@ import useCurrencies from "./hooks/useCurrencies";
 
 import { validateConversion, calculateConversion } from "./utils/currency";
 
-import { getExchangeRate } from "./services/currencyService";
+import {
+  getExchangeRate,
+  getHistoricalRates,
+} from "./services/currencyService";
 
 function App() {
   const { currencies, loadingCurrencies, currenciesError } = useCurrencies();
@@ -22,25 +25,44 @@ function App() {
 
   const [convertedValue, setConvertedValue] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
+
   const [message, setMessage] = useState("");
 
-  const historyData = [
-    {
-      date: "01/10/2026",
-      currency: "USD",
-      rate: "5,40",
-    },
-    {
-      date: "30/09/2026",
-      currency: "USD",
-      rate: "5,38",
-    },
-    {
-      date: "29/09/2026",
-      currency: "USD",
-      rate: "5,35",
-    },
-  ];
+  const [historyData, setHistoryData] = useState([]);
+  const [historyDays, setHistoryDays] = useState(7);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [historyError, setHistoryError] = useState("");
+
+  useEffect(() => {
+    async function loadHistory() {
+      if (fromCurrency === toCurrency) {
+        setHistoryData([]);
+        return;
+      }
+
+      try {
+        setLoadingHistory(true);
+        setHistoryError("");
+
+        const data = await getHistoricalRates(
+          fromCurrency,
+          toCurrency,
+          historyDays,
+        );
+
+        setHistoryData(data);
+      } catch (error) {
+        console.error(error);
+
+        setHistoryData([]);
+        setHistoryError("Erro ao carregar histórico de cotações.");
+      } finally {
+        setLoadingHistory(false);
+      }
+    }
+
+    loadHistory();
+  }, [fromCurrency, toCurrency, historyDays]);
 
   async function handleConvert() {
     const validation = validateConversion(amount, fromCurrency, toCurrency);
@@ -101,9 +123,20 @@ function App() {
         message={message}
       />
 
-      <HistoryCard />
+      <HistoryCard
+        historyDays={historyDays}
+        onHistoryDaysChange={setHistoryDays}
+        loading={loadingHistory}
+        error={historyError}
+        data={historyData}
+      />
 
-      <HistoryTable data={historyData} />
+      <HistoryTable
+        data={historyData}
+        loading={loadingHistory}
+        fromCurrency={fromCurrency}
+        toCurrency={toCurrency}
+      />
     </main>
   );
 }
