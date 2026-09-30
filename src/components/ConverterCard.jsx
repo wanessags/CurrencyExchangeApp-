@@ -1,3 +1,89 @@
+import { useEffect, useRef, useState } from "react";
+import { getCurrencyFlagUrl } from "../utils/currencyFlags";
+
+function CurrencySelect({ label, value, currencies, disabled, onChange }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  const selectedCurrency = currencies.find(
+    (currency) => currency.iso_code === value,
+  );
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  function handleSelect(currencyCode) {
+    onChange(currencyCode);
+    setOpen(false);
+  }
+
+  const flagUrl = getCurrencyFlagUrl(value);
+
+  return (
+    <div className="field currency-select-container" ref={containerRef}>
+      <label>{label}</label>
+
+      <button
+        type="button"
+        className="currency-select-button"
+        disabled={disabled}
+        onClick={() => setOpen(!open)}
+      >
+        <span className="currency-selected">
+          {flagUrl && <img src={flagUrl} alt="" className="currency-flag" />}
+
+          <strong>{value}</strong>
+
+          {selectedCurrency && (
+            <span className="currency-name">{selectedCurrency.name}</span>
+          )}
+        </span>
+
+        <span className="select-arrow">▾</span>
+      </button>
+
+      {open && !disabled && (
+        <div className="currency-dropdown">
+          {currencies.map((currency) => {
+            const optionFlag = getCurrencyFlagUrl(currency.iso_code);
+
+            return (
+              <button
+                type="button"
+                className="currency-option"
+                key={currency.iso_code}
+                onClick={() => handleSelect(currency.iso_code)}
+              >
+                {optionFlag && (
+                  <img src={optionFlag} alt="" className="currency-flag" />
+                )}
+
+                <strong>{currency.iso_code}</strong>
+
+                <span>{currency.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ConverterCard({
   currencies,
   amount,
@@ -10,73 +96,50 @@ function ConverterCard({
   onConvert,
 }) {
   return (
-    <section className="card">
+    <section className="card converter-card" id="inicio">
       <h2>Conversor de Moedas</h2>
 
-      <div className="field">
-        <label htmlFor="amount">Valor</label>
+      <div className="converter-grid">
+        <div className="field amount-field">
+          <label htmlFor="amount">Valor</label>
 
-        <input
-          id="amount"
-          type="number"
-          min="0"
-          placeholder="100,00"
-          value={amount}
-          onChange={(event) => onAmountChange(event.target.value)}
+          <input
+            id="amount"
+            type="text"
+            inputMode="decimal"
+            placeholder="100,00"
+            value={amount}
+            onChange={(event) => onAmountChange(event.target.value)}
+          />
+        </div>
+
+        <CurrencySelect
+          label="De"
+          value={fromCurrency}
+          currencies={currencies}
+          disabled={loadingCurrencies}
+          onChange={onFromCurrencyChange}
         />
-      </div>
 
-      <div className="currency-row">
-        <div className="field">
-          <label htmlFor="fromCurrency">De</label>
+        <CurrencySelect
+          label="Para"
+          value={toCurrency}
+          currencies={currencies}
+          disabled={loadingCurrencies}
+          onChange={onToCurrencyChange}
+        />
 
-          <select
-            id="fromCurrency"
-            value={fromCurrency}
+        <div className="converter-button-wrapper">
+          <button
+            className="convert-button"
+            type="button"
+            onClick={onConvert}
             disabled={loadingCurrencies}
-            onChange={(event) => onFromCurrencyChange(event.target.value)}
           >
-            {loadingCurrencies ? (
-              <option>Carregando...</option>
-            ) : (
-              currencies.map((currency) => (
-                <option key={currency.iso_code} value={currency.iso_code}>
-                  {currency.iso_code} - {currency.name}
-                </option>
-              ))
-            )}
-          </select>
-        </div>
-
-        <div className="field">
-          <label htmlFor="toCurrency">Para</label>
-
-          <select
-            id="toCurrency"
-            value={toCurrency}
-            disabled={loadingCurrencies}
-            onChange={(event) => onToCurrencyChange(event.target.value)}
-          >
-            {loadingCurrencies ? (
-              <option>Carregando...</option>
-            ) : (
-              currencies.map((currency) => (
-                <option key={currency.iso_code} value={currency.iso_code}>
-                  {currency.iso_code} - {currency.name}
-                </option>
-              ))
-            )}
-          </select>
+            Converter
+          </button>
         </div>
       </div>
-
-      <button
-        className="convert-button"
-        onClick={onConvert}
-        disabled={loadingCurrencies}
-      >
-        {loadingCurrencies ? "Carregando moedas..." : "Converter"}
-      </button>
     </section>
   );
 }

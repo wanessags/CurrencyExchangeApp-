@@ -1,3 +1,5 @@
+import { formatValue, formatRate, parseCurrencyValue } from "../utils/currency";
+
 function ResultCard({
   amount,
   fromCurrency,
@@ -7,7 +9,7 @@ function ResultCard({
   message,
 }) {
   return (
-    <section className="card result-card">
+    <section className="result-card">
       <h2>Resultado da Conversão</h2>
 
       {message && <p className="error-message">{message}</p>}
@@ -21,16 +23,20 @@ function ResultCard({
       {!message && convertedValue !== null && (
         <>
           <p className="result-value">
-            {Number(amount).toFixed(2)} {fromCurrency}
+            {formatValue(parseCurrencyValue(amount))} {fromCurrency}
             {" = "}
-            {convertedValue.toFixed(2)} {toCurrency}
+            {formatValue(convertedValue)} {toCurrency}
           </p>
 
-          <p className="exchange-rate">
-            Taxa de câmbio: 1 {fromCurrency}
-            {" = "}
-            {exchangeRate.toFixed(4)} {toCurrency}
-          </p>
+          <div className="result-details">
+            <span>
+              Taxa de câmbio: 1 {fromCurrency}
+              {" = "}
+              {formatRate(exchangeRate)} {toCurrency}
+            </span>
+
+            <span>◷ Atualizado agora</span>
+          </div>
         </>
       )}
     </section>

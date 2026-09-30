@@ -25,7 +25,7 @@ function HistoryCard({
   }));
 
   return (
-    <section className="card">
+    <section className="card" id="historico">
       <div className="section-header">
         <h2>Histórico da Cotação</h2>
 
@@ -43,28 +43,38 @@ function HistoryCard({
       </div>
 
       {loading && (
-        <div className="chart-placeholder">
-          <p>Carregando histórico...</p>
+        <div className="chart-state">
+          <div className="loading-circle"></div>
+
+          <p>Carregando cotações...</p>
         </div>
       )}
 
       {!loading && error && (
-        <div className="chart-placeholder">
-          <p className="error-message">{error}</p>
+        <div className="chart-state error-state">
+          <div className="state-icon">!</div>
+
+          <strong>Não foi possível carregar os dados.</strong>
+
+          <p>Tente novamente mais tarde.</p>
         </div>
       )}
 
       {!loading && !error && chartData.length === 0 && (
-        <div className="chart-placeholder">
-          <p>Não há dados disponíveis para este período.</p>
+        <div className="chart-state">
+          <div className="empty-icon">▤</div>
+
+          <strong>Nenhum dado disponível.</strong>
+
+          <p>Não há histórico de cotações para o período selecionado.</p>
         </div>
       )}
 
       {!loading && !error && chartData.length > 0 && (
         <div className="chart-container">
-          <p className="chart-title">
+          <div className="chart-pair">
             {fromCurrency} → {toCurrency}
-          </p>
+          </div>
 
           <ResponsiveContainer width="100%" height={300}>
             <LineChart
@@ -72,27 +82,42 @@ function HistoryCard({
               margin={{
                 top: 10,
                 right: 20,
-                left: 10,
-                bottom: 10,
+                left: 5,
+                bottom: 5,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid
+                stroke="#e5e7eb"
+                strokeDasharray="3 3"
+                vertical={true}
+              />
 
               <XAxis
                 dataKey="date"
                 tick={{
-                  fontSize: 12,
+                  fontSize: 11,
+                  fill: "#64748b",
                 }}
+                axisLine={{
+                  stroke: "#cbd5e1",
+                }}
+                tickLine={false}
               />
 
               <YAxis
                 domain={["auto", "auto"]}
                 tick={{
-                  fontSize: 12,
+                  fontSize: 11,
+                  fill: "#64748b",
                 }}
+                axisLine={false}
+                tickLine={false}
+                width={65}
               />
 
-              <Tooltip />
+              <Tooltip
+                formatter={(value) => [Number(value).toFixed(4), "Cotação"]}
+              />
 
               <Line
                 type="monotone"
@@ -101,9 +126,13 @@ function HistoryCard({
                 strokeWidth={3}
                 dot={{
                   r: 4,
+                  fill: "#ffffff",
+                  stroke: "#2563eb",
+                  strokeWidth: 3,
                 }}
                 activeDot={{
                   r: 6,
+                  fill: "#2563eb",
                 }}
               />
             </LineChart>

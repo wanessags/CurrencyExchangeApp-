@@ -20,22 +20,28 @@ function App() {
   const { currencies, loadingCurrencies, currenciesError } = useCurrencies();
 
   const [amount, setAmount] = useState("");
+
   const [fromCurrency, setFromCurrency] = useState("BRL");
+
   const [toCurrency, setToCurrency] = useState("USD");
 
   const [convertedValue, setConvertedValue] = useState(null);
+
   const [exchangeRate, setExchangeRate] = useState(null);
 
   const [message, setMessage] = useState("");
 
   const [historyData, setHistoryData] = useState([]);
+
   const [historyDays, setHistoryDays] = useState(7);
+
   const [loadingHistory, setLoadingHistory] = useState(false);
+
   const [historyError, setHistoryError] = useState("");
 
   useEffect(() => {
     async function loadHistory() {
-      if (fromCurrency === toCurrency) {
+      if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
         setHistoryData([]);
         return;
       }
@@ -50,11 +56,12 @@ function App() {
           historyDays,
         );
 
-        setHistoryData(data);
+        setHistoryData(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao carregar histórico:", error);
 
         setHistoryData([]);
+
         setHistoryError("Erro ao carregar histórico de cotações.");
       } finally {
         setLoadingHistory(false);
@@ -71,23 +78,30 @@ function App() {
       setMessage(validation.message);
       setConvertedValue(null);
       setExchangeRate(null);
+
       return;
     }
 
     try {
+      setMessage("");
+
       const data = await getExchangeRate(fromCurrency, toCurrency);
 
-      const rate = data.rate;
+      const rate = Number(data.rate);
+
+      if (!Number.isFinite(rate)) {
+        throw new Error("Cotação inválida recebida da API");
+      }
 
       const result = calculateConversion(amount, rate);
 
       setConvertedValue(result);
       setExchangeRate(rate);
-      setMessage("");
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao converter:", error);
 
       setMessage("Erro ao buscar cotação.");
+
       setConvertedValue(null);
       setExchangeRate(null);
     }
@@ -95,10 +109,7 @@ function App() {
 
   return (
     <main className="app">
-      <Header
-        title="Currency Exchange App"
-        subtitle="Converta e analise moedas de forma simples"
-      />
+      <Header />
 
       <ConverterCard
         currencies={currencies}
@@ -139,6 +150,10 @@ function App() {
         fromCurrency={fromCurrency}
         toCurrency={toCurrency}
       />
+
+      <footer id="sobre" className="footer">
+        Currency Exchange App
+      </footer>
     </main>
   );
 }

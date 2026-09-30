@@ -1,7 +1,20 @@
-export function validateConversion(amount, fromCurrency, toCurrency) {
-  const numericAmount = Number(amount);
+export function parseCurrencyValue(value) {
+  if (typeof value === "number") {
+    return value;
+  }
 
-  if (!amount || numericAmount <= 0) {
+  const normalizedValue = String(value)
+    .trim()
+    .replace(/\./g, "")
+    .replace(",", ".");
+
+  return Number(normalizedValue);
+}
+
+export function validateConversion(amount, fromCurrency, toCurrency) {
+  const numericAmount = parseCurrencyValue(amount);
+
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
     return {
       valid: false,
       message: "Digite um valor maior que zero.",
@@ -22,13 +35,31 @@ export function validateConversion(amount, fromCurrency, toCurrency) {
 }
 
 export function calculateConversion(amount, rate) {
-  return Number(amount) * rate;
+  const numericAmount = parseCurrencyValue(amount);
+
+  return numericAmount * Number(rate);
 }
 
 export function formatValue(value) {
-  return Number(value).toFixed(2);
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
 }
 
-export function formatRate(rate) {
-  return Number(rate).toFixed(4);
+export function formatRate(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+  }).format(Number(value));
+}
+
+export function formatDate(date) {
+  if (!date) {
+    return "";
+  }
+
+  const [year, month, day] = date.split("-");
+
+  return `${day}/${month}/${year}`;
 }

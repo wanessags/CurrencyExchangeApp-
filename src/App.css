@@ -1,110 +1,290 @@
 .app {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 30px 24px 50px;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .header {
-  text-align: center;
-  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
-.header h1 {
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: #eff6ff;
+  font-size: 27px;
+}
+
+.brand-text h1 {
   margin: 0;
-  font-size: 36px;
   color: #0f172a;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.header p {
-  margin-top: 10px;
+.brand-text p {
+  margin: 5px 0 0;
   color: #64748b;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-.card {
+.navigation {
+  display: flex;
+  gap: 28px;
+}
+
+.navigation a {
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.navigation a:hover,
+.navigation a:first-child {
+  color: #2563eb;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card,
+.result-card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
 }
 
-.card h2 {
+.card h2,
+.result-card h2 {
   margin: 0 0 20px;
-  font-size: 22px;
   color: #0f172a;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+/* =========================
+   CONVERSOR
+========================= */
+
+.converter-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1fr;
+  align-items: end;
+  gap: 16px;
 }
 
 .field {
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-bottom: 18px;
+  margin: 0;
 }
 
 .field label {
   margin-bottom: 8px;
+  color: #334155;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
 }
 
 .field input,
-.field select,
 .search-input,
 .sort-select,
 .period-select {
   width: 100%;
-  min-height: 44px;
-  padding: 10px 12px;
+  height: 48px;
+  padding: 0 14px;
   border: 1px solid #cbd5e1;
-  border-radius: 9px;
+  border-radius: 8px;
   background-color: #ffffff;
   color: #0f172a;
-  font-size: 15px;
+  font-size: 16px;
   outline: none;
 }
 
 .field input:focus,
-.field select:focus,
 .search-input:focus,
 .sort-select:focus,
 .period-select:focus {
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
-.currency-row {
-  display: flex;
-  gap: 16px;
+/* =========================
+   SELETOR DE MOEDAS
+========================= */
+
+.currency-select-container {
+  position: relative;
 }
 
-.convert-button,
-.export-button {
-  border: none;
-  border-radius: 9px;
-  background-color: #2563eb;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 600;
+.currency-select-button {
+  width: 100%;
+  height: 48px;
+  padding: 0 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #0f172a;
   cursor: pointer;
-  transition: 0.2s;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.currency-select-button:hover {
+  border-color: #94a3b8;
+}
+
+.currency-select-button:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  outline: none;
+}
+
+.currency-selected {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.currency-flag {
+  width: 25px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.currency-selected strong {
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.currency-name {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-arrow {
+  margin-left: 8px;
+  color: #475569;
+  font-size: 18px;
+}
+
+.currency-dropdown {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 6px);
+  left: 0;
+
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+
+  background-color: #ffffff;
+
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+}
+
+.currency-option {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 13px;
+
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+
+  background-color: #ffffff;
+  color: #0f172a;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-align: left;
+}
+
+.currency-option:hover {
+  background-color: #eff6ff;
+}
+
+.currency-option strong {
+  min-width: 40px;
+  color: #0f172a;
+  font-size: 15px;
+}
+
+.currency-option span {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================
+   BOTÃO CONVERTER
+========================= */
+
+.converter-button-wrapper {
+  display: flex;
 }
 
 .convert-button {
   width: 100%;
-  padding: 14px;
+  height: 48px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: #2563eb;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.export-button {
-  margin-top: 20px;
-  padding: 12px 20px;
-}
-
-.convert-button:hover,
-.export-button:hover {
+.convert-button:hover {
   background-color: #1d4ed8;
 }
 
@@ -113,74 +293,145 @@
   cursor: not-allowed;
 }
 
+/* =========================
+   RESULTADO
+========================= */
+
 .result-card {
   background-color: #eff6ff;
   border-color: #bfdbfe;
 }
 
 .result-card h2 {
-  color: #0f172a;
+  margin-bottom: 12px;
+  color: #2563eb;
+  font-size: 17px;
 }
 
 .result-value {
   margin: 0;
-  font-size: 28px;
+  color: #0f172a;
+  font-size: 27px;
   font-weight: 700;
-  color: #2563eb;
 }
 
-.exchange-rate {
-  margin: 10px 0 0;
+.result-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-top: 11px;
+
   color: #64748b;
+  font-size: 14px;
 }
+
+.result-placeholder {
+  margin: 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* =========================
+   CABEÇALHOS DAS SEÇÕES
+========================= */
 
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+
+  gap: 18px;
   margin-bottom: 20px;
 }
 
 .section-header h2 {
   margin: 0;
+  font-size: 21px;
 }
 
 .period-select {
   width: auto;
-  min-width: 160px;
+  min-width: 170px;
+  font-size: 15px;
 }
 
-.chart-placeholder {
-  height: 280px;
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  background-color: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chart-placeholder p {
-  color: #64748b;
-}
+/* =========================
+   GRÁFICO
+========================= */
 
 .chart-container {
   width: 100%;
-  min-height: 330px;
-  padding: 20px 10px 10px;
+  min-height: 370px;
+
+  padding: 20px 12px 8px;
+
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 9px;
+
   background-color: #ffffff;
 }
 
-.chart-title {
-  margin: 0 0 20px;
+.chart-pair {
+  margin-bottom: 12px;
+
   text-align: center;
-  color: #475569;
-  font-size: 14px;
-  font-weight: 600;
+
+  color: #334155;
+
+  font-size: 15px;
+  font-weight: 700;
 }
+
+.chart-state {
+  min-height: 300px;
+
+  border-radius: 9px;
+
+  background-color: #f8fafc;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  text-align: center;
+  color: #64748b;
+}
+
+.chart-state strong {
+  font-size: 16px;
+}
+
+.chart-state p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.loading-circle {
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 14px;
+
+  border: 4px solid #dbeafe;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   TABELA
+========================= */
 
 .table-actions {
   display: flex;
@@ -188,16 +439,21 @@
 }
 
 .search-input {
-  width: 220px;
+  width: 270px;
+  font-size: 15px;
 }
 
 .sort-select {
-  width: 180px;
+  width: 200px;
+  font-size: 15px;
 }
 
 .table-container {
   width: 100%;
   overflow-x: auto;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
 }
 
 table {
@@ -207,86 +463,287 @@ table {
 
 th,
 td {
-  padding: 14px;
+  padding: 14px 16px;
+
   text-align: left;
+
   border-bottom: 1px solid #e2e8f0;
+
+  font-size: 15px;
 }
 
 th {
-  background-color: #f8fafc;
+  background-color: #f1f5f9;
   color: #334155;
+
   font-size: 14px;
+  font-weight: 700;
 }
 
 td {
   color: #475569;
 }
 
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
 tbody tr:hover {
   background-color: #f8fafc;
 }
 
+.table-message {
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* =========================
+   EXPORTAR CSV
+========================= */
+
+.export-button {
+  margin-top: 18px;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: #2563eb;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.export-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* =========================
+   MENSAGENS DE ERRO
+========================= */
+
 .error-message {
   margin: 0;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 13px;
+
+  border-radius: 7px;
+
   background-color: #fef2f2;
   color: #b91c1c;
+
+  font-size: 15px;
   font-weight: 600;
 }
 
-.result-placeholder {
-  margin: 0;
-  color: #64748b;
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  padding: 22px 0;
+
+  text-align: center;
+
+  color: #94a3b8;
+  font-size: 14px;
 }
 
-@media (max-width: 700px) {
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 850px) {
+  .converter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .amount-field,
+  .converter-button-wrapper {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================
+   CELULAR
+========================= */
+
+@media (max-width: 650px) {
   .app {
-    padding: 24px 14px;
+    padding: 20px 14px 40px;
   }
 
-  .header h1 {
-    font-size: 28px;
+  .navigation {
+    display: none;
   }
 
-  .currency-row {
-    flex-direction: column;
-    gap: 0;
+  .brand-text h1 {
+    font-size: 22px;
+  }
+
+  .brand-text p {
+    font-size: 13px;
+  }
+
+  .converter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .amount-field,
+  .converter-button-wrapper {
+    grid-column: auto;
+  }
+
+  .card,
+  .result-card {
+    padding: 18px;
+  }
+
+  .card h2 {
+    font-size: 19px;
   }
 
   .section-header {
-    flex-direction: column;
     align-items: stretch;
+    flex-direction: column;
   }
 
-  .period-select,
-  .search-input,
-  .sort-select {
+  .period-select {
     width: 100%;
+  }
+
+  .result-value {
+    font-size: 23px;
+  }
+
+  .result-details {
+    flex-direction: column;
   }
 
   .table-actions {
     flex-direction: column;
   }
 
-  .result-value {
-    font-size: 22px;
+  .search-input,
+  .sort-select {
+    width: 100%;
   }
 
-  .card {
-    padding: 18px;
-  }
-
-  .chart-placeholder {
-    height: 220px;
-  }
-
-  .chart-container {
-    min-height: 300px;
-    padding: 15px 5px 5px;
+  .currency-name {
+    display: none;
   }
 
   .export-button {
     width: 100%;
+  }
+
+  /* =========================
+   AJUSTE FINAL DAS FONTES
+========================= */
+
+  body {
+    font-size: 16px;
+  }
+
+  .brand-text h1 {
+    font-size: 30px;
+  }
+
+  .brand-text p {
+    font-size: 16px;
+  }
+
+  .navigation a {
+    font-size: 16px;
+  }
+
+  .card h2,
+  .section-header h2 {
+    font-size: 23px;
+  }
+
+  .field label {
+    font-size: 16px;
+  }
+
+  .field input,
+  .search-input,
+  .sort-select,
+  .period-select {
+    font-size: 16px;
+  }
+
+  .currency-selected strong {
+    font-size: 17px;
+  }
+
+  .currency-name {
+    font-size: 15px;
+  }
+
+  .currency-option strong {
+    font-size: 16px;
+  }
+
+  .currency-option span {
+    font-size: 15px;
+  }
+
+  .convert-button {
+    font-size: 17px;
+  }
+
+  .result-card h2 {
+    font-size: 19px;
+  }
+
+  .result-value {
+    font-size: 29px;
+  }
+
+  .result-details {
+    font-size: 16px;
+  }
+
+  .result-placeholder {
+    font-size: 16px;
+  }
+
+  .chart-pair {
+    font-size: 16px;
+  }
+
+  .chart-state strong {
+    font-size: 17px;
+  }
+
+  .chart-state p {
+    font-size: 16px;
+  }
+
+  th {
+    font-size: 16px;
+  }
+
+  td {
+    font-size: 16px;
+  }
+
+  .table-message {
+    font-size: 16px;
+  }
+
+  .export-button {
+    font-size: 16px;
+  }
+
+  .error-message {
+    font-size: 16px;
+  }
+
+  .footer {
+    font-size: 15px;
   }
 }

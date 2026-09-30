@@ -7,7 +7,9 @@ export async function getCurrencies() {
     throw new Error("Erro ao buscar moedas");
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  return data;
 }
 
 export async function getExchangeRate(fromCurrency, toCurrency) {
@@ -19,7 +21,9 @@ export async function getExchangeRate(fromCurrency, toCurrency) {
     throw new Error("Erro ao buscar cotação");
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  return data;
 }
 
 export async function getHistoricalRates(fromCurrency, toCurrency, days = 7) {
@@ -32,9 +36,11 @@ export async function getHistoricalRates(fromCurrency, toCurrency, days = 7) {
   const to = endDate.toISOString().split("T")[0];
 
   const url =
-    `${API_URL}/rates?base=${fromCurrency.toLowerCase()}` +
+    `${API_URL}/rates` +
+    `?base=${fromCurrency.toLowerCase()}` +
     `&quotes=${toCurrency.toLowerCase()}` +
-    `&from=${from}&to=${to}`;
+    `&from=${from}` +
+    `&to=${to}`;
 
   const response = await fetch(url);
 
@@ -42,5 +48,7 @@ export async function getHistoricalRates(fromCurrency, toCurrency, days = 7) {
     throw new Error("Erro ao buscar histórico");
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  return Array.isArray(data) ? data : [];
 }

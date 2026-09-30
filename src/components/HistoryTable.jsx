@@ -1,11 +1,19 @@
-function HistoryTable({ data, loading, fromCurrency, toCurrency }) {
+import { formatDate, formatRate } from "../utils/currency";
+
+function HistoryTable({ data, loading, toCurrency }) {
+  const safeData = Array.isArray(data) ? data : [];
+
   return (
-    <section className="card">
-      <div className="section-header">
+    <section className="card historical-data-card">
+      <div className="section-header table-header">
         <h2>Dados Históricos</h2>
 
         <div className="table-actions">
-          <input className="search-input" type="text" placeholder="Buscar..." />
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Buscar por data ou moeda..."
+          />
 
           <select className="sort-select" defaultValue="date">
             <option value="date">Ordenar por data</option>
@@ -15,29 +23,33 @@ function HistoryTable({ data, loading, fromCurrency, toCurrency }) {
         </div>
       </div>
 
-      {loading ? (
-        <p>Carregando dados...</p>
-      ) : data.length === 0 ? (
-        <p>Não há dados históricos disponíveis.</p>
-      ) : (
+      {loading && (
+        <p className="table-message">Carregando dados históricos...</p>
+      )}
+
+      {!loading && safeData.length === 0 && (
+        <p className="table-message">Não há dados históricos disponíveis.</p>
+      )}
+
+      {!loading && safeData.length > 0 && (
         <div className="table-container">
           <table>
             <thead>
               <tr>
                 <th>Data</th>
-                <th>De</th>
-                <th>Para</th>
+                <th>Moeda</th>
                 <th>Cotação</th>
               </tr>
             </thead>
 
             <tbody>
-              {data.map((item) => (
-                <tr key={`${item.date}-${item.base}-${item.quote}`}>
-                  <td>{item.date}</td>
-                  <td>{fromCurrency}</td>
+              {safeData.map((item, index) => (
+                <tr key={`${item.date}-${index}`}>
+                  <td>{formatDate(item.date)}</td>
+
                   <td>{toCurrency}</td>
-                  <td>{Number(item.rate).toFixed(4)}</td>
+
+                  <td>{formatRate(item.rate)}</td>
                 </tr>
               ))}
             </tbody>
@@ -45,7 +57,9 @@ function HistoryTable({ data, loading, fromCurrency, toCurrency }) {
         </div>
       )}
 
-      <button className="export-button">Exportar CSV</button>
+      <button className="export-button" type="button">
+        ↓ Exportar CSV
+      </button>
     </section>
   );
 }
