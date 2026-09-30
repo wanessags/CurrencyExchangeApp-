@@ -1,4 +1,4 @@
-function HistoryTable() {
+function HistoryTable({ data }) {
   return (
     <section className="card">
       <div className="section-header">
@@ -9,7 +9,9 @@ function HistoryTable() {
 
           <select className="sort-select" defaultValue="date">
             <option value="date">Ordenar por data</option>
+
             <option value="currency">Ordenar por moeda</option>
+
             <option value="rate">Ordenar por cotação</option>
           </select>
         </div>
@@ -26,23 +28,13 @@ function HistoryTable() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>01/10/2026</td>
-              <td>USD</td>
-              <td>5,40</td>
-            </tr>
-
-            <tr>
-              <td>30/09/2026</td>
-              <td>USD</td>
-              <td>5,38</td>
-            </tr>
-
-            <tr>
-              <td>29/09/2026</td>
-              <td>USD</td>
-              <td>5,35</td>
-            </tr>
+            {data.map((item) => (
+              <tr key={`${item.date}-${item.currency}`}>
+                <td>{item.date}</td>
+                <td>{item.currency}</td>
+                <td>{item.rate}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

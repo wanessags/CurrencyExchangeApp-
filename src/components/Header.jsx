@@ -1,8 +1,8 @@
-function Header() {
+function Header({ title, subtitle }) {
   return (
     <header className="header">
-      <h1>Currency Exchange App</h1>
-      <p>Converta e analise moedas de forma simples</p>
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
     </header>
   );
 }

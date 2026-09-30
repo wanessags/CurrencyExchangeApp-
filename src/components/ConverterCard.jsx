@@ -1,10 +1,11 @@
-function ConverterCard() {
+function ConverterCard({ currencies, fromCurrency, toCurrency }) {
   return (
     <section className="card">
       <h2>Conversor de Moedas</h2>
 
       <div className="field">
         <label htmlFor="amount">Valor</label>
+
         <input id="amount" type="number" placeholder="100,00" />
       </div>
 
@@ -12,22 +13,24 @@ function ConverterCard() {
         <div className="field">
           <label htmlFor="fromCurrency">De</label>
 
-          <select id="fromCurrency" defaultValue="BRL">
-            <option value="BRL">BRL</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
+          <select id="fromCurrency" defaultValue={fromCurrency}>
+            {currencies.map((currency) => (
+              <option key={currency} value={currency}>
+                {currency}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="field">
           <label htmlFor="toCurrency">Para</label>
 
-          <select id="toCurrency" defaultValue="USD">
-            <option value="USD">USD</option>
-            <option value="BRL">BRL</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
+          <select id="toCurrency" defaultValue={toCurrency}>
+            {currencies.map((currency) => (
+              <option key={currency} value={currency}>
+                {currency}
+              </option>
+            ))}
           </select>
         </div>
       </div>
