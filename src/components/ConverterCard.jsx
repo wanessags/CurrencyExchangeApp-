@@ -1,4 +1,13 @@
-function ConverterCard({ currencies, fromCurrency, toCurrency }) {
+function ConverterCard({
+  currencies,
+  amount,
+  fromCurrency,
+  toCurrency,
+  onAmountChange,
+  onFromCurrencyChange,
+  onToCurrencyChange,
+  onConvert,
+}) {
   return (
     <section className="card">
       <h2>Conversor de Moedas</h2>
@@ -6,14 +15,24 @@ function ConverterCard({ currencies, fromCurrency, toCurrency }) {
       <div className="field">
         <label htmlFor="amount">Valor</label>
 
-        <input id="amount" type="number" placeholder="100,00" />
+        <input
+          id="amount"
+          type="number"
+          placeholder="100,00"
+          value={amount}
+          onChange={(event) => onAmountChange(event.target.value)}
+        />
       </div>
 
       <div className="currency-row">
         <div className="field">
           <label htmlFor="fromCurrency">De</label>
 
-          <select id="fromCurrency" defaultValue={fromCurrency}>
+          <select
+            id="fromCurrency"
+            value={fromCurrency}
+            onChange={(event) => onFromCurrencyChange(event.target.value)}
+          >
             {currencies.map((currency) => (
               <option key={currency} value={currency}>
                 {currency}
@@ -25,7 +44,11 @@ function ConverterCard({ currencies, fromCurrency, toCurrency }) {
         <div className="field">
           <label htmlFor="toCurrency">Para</label>
 
-          <select id="toCurrency" defaultValue={toCurrency}>
+          <select
+            id="toCurrency"
+            value={toCurrency}
+            onChange={(event) => onToCurrencyChange(event.target.value)}
+          >
             {currencies.map((currency) => (
               <option key={currency} value={currency}>
                 {currency}
@@ -35,7 +58,9 @@ function ConverterCard({ currencies, fromCurrency, toCurrency }) {
         </div>
       </div>
 
-      <button className="convert-button">Converter</button>
+      <button className="convert-button" onClick={onConvert}>
+        Converter
+      </button>
     </section>
   );
 }
