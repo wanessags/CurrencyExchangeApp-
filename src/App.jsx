@@ -9,15 +9,21 @@ import HistoryTable from "./components/HistoryTable";
 
 import { validateConversion, calculateConversion } from "./utils/currency";
 
+import { getExchangeRate } from "./services/currencyService";
+
 function App() {
   const currencies = ["BRL", "USD", "EUR", "GBP"];
 
   const [amount, setAmount] = useState("");
+
   const [fromCurrency, setFromCurrency] = useState("BRL");
+
   const [toCurrency, setToCurrency] = useState("USD");
 
   const [convertedValue, setConvertedValue] = useState(null);
+
   const [exchangeRate, setExchangeRate] = useState(null);
+
   const [message, setMessage] = useState("");
 
   const historyData = [
@@ -26,11 +32,13 @@ function App() {
       currency: "USD",
       rate: "5,40",
     },
+
     {
       date: "30/09/2026",
       currency: "USD",
       rate: "5,38",
     },
+
     {
       date: "29/09/2026",
       currency: "USD",
@@ -38,49 +46,38 @@ function App() {
     },
   ];
 
-  const mockRates = {
-    BRL: {
-      USD: 0.185,
-      EUR: 0.158,
-      GBP: 0.137,
-    },
-
-    USD: {
-      BRL: 5.4,
-      EUR: 0.85,
-      GBP: 0.74,
-    },
-
-    EUR: {
-      BRL: 6.32,
-      USD: 1.17,
-      GBP: 0.86,
-    },
-
-    GBP: {
-      BRL: 7.3,
-      USD: 1.35,
-      EUR: 1.16,
-    },
-  };
-
-  function handleConvert() {
+  async function handleConvert() {
     const validation = validateConversion(amount, fromCurrency, toCurrency);
 
     if (!validation.valid) {
       setMessage(validation.message);
+
       setConvertedValue(null);
+
       setExchangeRate(null);
+
       return;
     }
 
-    const rate = mockRates[fromCurrency][toCurrency];
+    try {
+      const data = await getExchangeRate(fromCurrency, toCurrency);
 
-    const result = calculateConversion(amount, rate);
+      const rate = data.rate;
 
-    setConvertedValue(result);
-    setExchangeRate(rate);
-    setMessage("");
+      const result = calculateConversion(amount, rate);
+
+      setConvertedValue(result);
+
+      setExchangeRate(rate);
+
+      setMessage("");
+    } catch (error) {
+      setMessage("Erro ao buscar cotação.");
+
+      setConvertedValue(null);
+
+      setExchangeRate(null);
+    }
   }
 
   return (
