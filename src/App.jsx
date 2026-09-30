@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
 import Header from "./components/Header";
@@ -7,12 +7,14 @@ import ResultCard from "./components/ResultCard";
 import HistoryCard from "./components/HistoryCard";
 import HistoryTable from "./components/HistoryTable";
 
+import useCurrencies from "./hooks/useCurrencies";
+
 import { validateConversion, calculateConversion } from "./utils/currency";
 
-import { getCurrencies, getExchangeRate } from "./services/currencyService";
+import { getExchangeRate } from "./services/currencyService";
 
 function App() {
-  const [currencies, setCurrencies] = useState([]);
+  const { currencies, loadingCurrencies, currenciesError } = useCurrencies();
 
   const [amount, setAmount] = useState("");
   const [fromCurrency, setFromCurrency] = useState("BRL");
@@ -20,9 +22,7 @@ function App() {
 
   const [convertedValue, setConvertedValue] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
-
   const [message, setMessage] = useState("");
-  const [loadingCurrencies, setLoadingCurrencies] = useState(true);
 
   const historyData = [
     {
@@ -41,26 +41,6 @@ function App() {
       rate: "5,35",
     },
   ];
-
-  useEffect(() => {
-    async function loadCurrencies() {
-      try {
-        setLoadingCurrencies(true);
-
-        const data = await getCurrencies();
-
-        setCurrencies(data);
-      } catch (error) {
-        console.error(error);
-
-        setMessage("Erro ao carregar moedas.");
-      } finally {
-        setLoadingCurrencies(false);
-      }
-    }
-
-    loadCurrencies();
-  }, []);
 
   async function handleConvert() {
     const validation = validateConversion(amount, fromCurrency, toCurrency);
@@ -109,6 +89,8 @@ function App() {
         onToCurrencyChange={setToCurrency}
         onConvert={handleConvert}
       />
+
+      {currenciesError && <p className="error-message">{currenciesError}</p>}
 
       <ResultCard
         amount={amount}
