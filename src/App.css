@@ -1,0 +1,134 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.app {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #0f172a;
+}
+
+.header p {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 16px;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.field label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #334155;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #2563eb;
+}
+
+.currency-row {
+  display: flex;
+  gap: 16px;
+}
+
+.convert-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.convert-button:hover {
+  background-color: #1d4ed8;
+}
+
+.result-card {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.result-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.result-card span {
+  color: #64748b;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 20px 14px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .currency-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .result-value {
+    font-size: 22px;
+  }
+}
