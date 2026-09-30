@@ -7,6 +7,8 @@ import ResultCard from "./components/ResultCard";
 import HistoryCard from "./components/HistoryCard";
 import HistoryTable from "./components/HistoryTable";
 
+import { validateConversion, calculateConversion } from "./utils/currency";
+
 function App() {
   const currencies = ["BRL", "USD", "EUR", "GBP"];
 
@@ -63,17 +65,10 @@ function App() {
   };
 
   function handleConvert() {
-    const numericAmount = Number(amount);
+    const validation = validateConversion(amount, fromCurrency, toCurrency);
 
-    if (!amount || numericAmount <= 0) {
-      setMessage("Digite um valor maior que zero.");
-      setConvertedValue(null);
-      setExchangeRate(null);
-      return;
-    }
-
-    if (fromCurrency === toCurrency) {
-      setMessage("Escolha moedas diferentes.");
+    if (!validation.valid) {
+      setMessage(validation.message);
       setConvertedValue(null);
       setExchangeRate(null);
       return;
@@ -81,7 +76,7 @@ function App() {
 
     const rate = mockRates[fromCurrency][toCurrency];
 
-    const result = numericAmount * rate;
+    const result = calculateConversion(amount, rate);
 
     setConvertedValue(result);
     setExchangeRate(rate);
