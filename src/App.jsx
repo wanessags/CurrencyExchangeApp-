@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 import Header from "./components/Header";
@@ -9,22 +9,20 @@ import HistoryTable from "./components/HistoryTable";
 
 import { validateConversion, calculateConversion } from "./utils/currency";
 
-import { getExchangeRate } from "./services/currencyService";
+import { getCurrencies, getExchangeRate } from "./services/currencyService";
 
 function App() {
-  const currencies = ["BRL", "USD", "EUR", "GBP"];
+  const [currencies, setCurrencies] = useState([]);
 
   const [amount, setAmount] = useState("");
-
   const [fromCurrency, setFromCurrency] = useState("BRL");
-
   const [toCurrency, setToCurrency] = useState("USD");
 
   const [convertedValue, setConvertedValue] = useState(null);
-
   const [exchangeRate, setExchangeRate] = useState(null);
 
   const [message, setMessage] = useState("");
+  const [loadingCurrencies, setLoadingCurrencies] = useState(true);
 
   const historyData = [
     {
@@ -32,13 +30,11 @@ function App() {
       currency: "USD",
       rate: "5,40",
     },
-
     {
       date: "30/09/2026",
       currency: "USD",
       rate: "5,38",
     },
-
     {
       date: "29/09/2026",
       currency: "USD",
@@ -46,16 +42,33 @@ function App() {
     },
   ];
 
+  useEffect(() => {
+    async function loadCurrencies() {
+      try {
+        setLoadingCurrencies(true);
+
+        const data = await getCurrencies();
+
+        setCurrencies(data);
+      } catch (error) {
+        console.error(error);
+
+        setMessage("Erro ao carregar moedas.");
+      } finally {
+        setLoadingCurrencies(false);
+      }
+    }
+
+    loadCurrencies();
+  }, []);
+
   async function handleConvert() {
     const validation = validateConversion(amount, fromCurrency, toCurrency);
 
     if (!validation.valid) {
       setMessage(validation.message);
-
       setConvertedValue(null);
-
       setExchangeRate(null);
-
       return;
     }
 
@@ -67,15 +80,13 @@ function App() {
       const result = calculateConversion(amount, rate);
 
       setConvertedValue(result);
-
       setExchangeRate(rate);
-
       setMessage("");
     } catch (error) {
+      console.error(error);
+
       setMessage("Erro ao buscar cotação.");
-
       setConvertedValue(null);
-
       setExchangeRate(null);
     }
   }
@@ -92,6 +103,7 @@ function App() {
         amount={amount}
         fromCurrency={fromCurrency}
         toCurrency={toCurrency}
+        loadingCurrencies={loadingCurrencies}
         onAmountChange={setAmount}
         onFromCurrencyChange={setFromCurrency}
         onToCurrencyChange={setToCurrency}

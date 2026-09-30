@@ -3,6 +3,7 @@ function ConverterCard({
   amount,
   fromCurrency,
   toCurrency,
+  loadingCurrencies,
   onAmountChange,
   onFromCurrencyChange,
   onToCurrencyChange,
@@ -18,6 +19,7 @@ function ConverterCard({
         <input
           id="amount"
           type="number"
+          min="0"
           placeholder="100,00"
           value={amount}
           onChange={(event) => onAmountChange(event.target.value)}
@@ -31,13 +33,18 @@ function ConverterCard({
           <select
             id="fromCurrency"
             value={fromCurrency}
+            disabled={loadingCurrencies}
             onChange={(event) => onFromCurrencyChange(event.target.value)}
           >
-            {currencies.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
+            {loadingCurrencies ? (
+              <option>Carregando...</option>
+            ) : (
+              currencies.map((currency) => (
+                <option key={currency.iso_code} value={currency.iso_code}>
+                  {currency.iso_code} - {currency.name}
+                </option>
+              ))
+            )}
           </select>
         </div>
 
@@ -47,19 +54,28 @@ function ConverterCard({
           <select
             id="toCurrency"
             value={toCurrency}
+            disabled={loadingCurrencies}
             onChange={(event) => onToCurrencyChange(event.target.value)}
           >
-            {currencies.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
+            {loadingCurrencies ? (
+              <option>Carregando...</option>
+            ) : (
+              currencies.map((currency) => (
+                <option key={currency.iso_code} value={currency.iso_code}>
+                  {currency.iso_code} - {currency.name}
+                </option>
+              ))
+            )}
           </select>
         </div>
       </div>
 
-      <button className="convert-button" onClick={onConvert}>
-        Converter
+      <button
+        className="convert-button"
+        onClick={onConvert}
+        disabled={loadingCurrencies}
+      >
+        {loadingCurrencies ? "Carregando moedas..." : "Converter"}
       </button>
     </section>
   );
