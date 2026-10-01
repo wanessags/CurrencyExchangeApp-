@@ -29,7 +29,7 @@ function HistoryTable({ data, loading, toCurrency }) {
     );
   });
 
-  // Cria uma cópia antes de ordenar
+  // Ordena os dados filtrados
   const sortedData = [...filteredData].sort((itemA, itemB) => {
     if (sortBy === "rate") {
       return Number(itemB.rate) - Number(itemA.rate);
@@ -37,6 +37,42 @@ function HistoryTable({ data, loading, toCurrency }) {
 
     return new Date(itemB.date) - new Date(itemA.date);
   });
+
+  // Exporta os dados exibidos na tabela para CSV
+  function handleExportCSV() {
+    if (sortedData.length === 0) {
+      return;
+    }
+
+    const header = ["Data", "Moeda", "Cotação"];
+
+    const rows = sortedData.map((item) => [
+      formatDate(item.date),
+      toCurrency,
+      formatRate(item.rate),
+    ]);
+
+    const csvContent = [header, ...rows].map((row) => row.join(";")).join("\n");
+
+    const blob = new Blob(["\uFEFF" + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `historico-${toCurrency}.csv`;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <section className="card historical-data-card">
@@ -104,7 +140,12 @@ function HistoryTable({ data, loading, toCurrency }) {
         </div>
       )}
 
-      <button className="export-button" type="button">
+      <button
+        className="export-button"
+        type="button"
+        onClick={handleExportCSV}
+        disabled={sortedData.length === 0}
+      >
         ↓ Exportar CSV
       </button>
     </section>
