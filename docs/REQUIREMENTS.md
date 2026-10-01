@@ -125,3 +125,9 @@ Não fazem parte do escopo deste projeto:
 **CA09** — A interface deve funcionar adequadamente em dispositivos desktop e mobile.
 
 **CA10** — O projeto deve possuir documentação, protótipos, Collection do Postman e histórico de commits no GitHub.
+
+## Protótipo no Figma
+
+O protótipo da interface foi desenvolvido no Figma, contemplando as versões desktop e mobile.
+
+[Acessar protótipo no Figma](https://www.figma.com/design/lsiiK8mEzXDVZu2Wh2JqC2/CurrencyExchange?node-id=0-1&t=MusmlIFQn6TGxCww-1)
