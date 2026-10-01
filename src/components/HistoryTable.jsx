@@ -1,7 +1,42 @@
+import { useState } from "react";
+
 import { formatDate, formatRate } from "../utils/currency";
 
 function HistoryTable({ data, loading, toCurrency }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("date");
+
   const safeData = Array.isArray(data) ? data : [];
+
+  // Filtra os dados de acordo com a busca
+  const filteredData = safeData.filter((item) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    if (!search) {
+      return true;
+    }
+
+    const formattedDate = formatDate(item.date).toLowerCase();
+
+    const originalDate = item.date.toLowerCase();
+
+    const currency = toCurrency.toLowerCase();
+
+    return (
+      formattedDate.includes(search) ||
+      originalDate.includes(search) ||
+      currency.includes(search)
+    );
+  });
+
+  // Cria uma cópia antes de ordenar
+  const sortedData = [...filteredData].sort((itemA, itemB) => {
+    if (sortBy === "rate") {
+      return Number(itemB.rate) - Number(itemA.rate);
+    }
+
+    return new Date(itemB.date) - new Date(itemA.date);
+  });
 
   return (
     <section className="card historical-data-card">
@@ -13,9 +48,15 @@ function HistoryTable({ data, loading, toCurrency }) {
             className="search-input"
             type="text"
             placeholder="Buscar por data ou moeda..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
 
-          <select className="sort-select" defaultValue="date">
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value)}
+          >
             <option value="date">Ordenar por data</option>
 
             <option value="rate">Ordenar por cotação</option>
@@ -31,7 +72,13 @@ function HistoryTable({ data, loading, toCurrency }) {
         <p className="table-message">Não há dados históricos disponíveis.</p>
       )}
 
-      {!loading && safeData.length > 0 && (
+      {!loading && safeData.length > 0 && sortedData.length === 0 && (
+        <p className="table-message">
+          Nenhum resultado encontrado para a busca.
+        </p>
+      )}
+
+      {!loading && sortedData.length > 0 && (
         <div className="table-container">
           <table>
             <thead>
@@ -43,7 +90,7 @@ function HistoryTable({ data, loading, toCurrency }) {
             </thead>
 
             <tbody>
-              {safeData.map((item, index) => (
+              {sortedData.map((item, index) => (
                 <tr key={`${item.date}-${index}`}>
                   <td>{formatDate(item.date)}</td>
 
