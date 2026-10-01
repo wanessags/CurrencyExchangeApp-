@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { getCurrencyFlagUrl } from "../utils/currencyFlags";
 
 function CurrencySelect({ label, value, currencies, disabled, onChange }) {
@@ -44,7 +45,16 @@ function CurrencySelect({ label, value, currencies, disabled, onChange }) {
         onClick={() => setOpen(!open)}
       >
         <span className="currency-selected">
-          {flagUrl && <img src={flagUrl} alt="" className="currency-flag" />}
+          {flagUrl && (
+            <img
+              src={flagUrl}
+              alt=""
+              className="currency-flag"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          )}
 
           <strong>{value}</strong>
 
@@ -69,7 +79,14 @@ function CurrencySelect({ label, value, currencies, disabled, onChange }) {
                 onClick={() => handleSelect(currency.iso_code)}
               >
                 {optionFlag && (
-                  <img src={optionFlag} alt="" className="currency-flag" />
+                  <img
+                    src={optionFlag}
+                    alt=""
+                    className="currency-flag"
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
+                    }}
+                  />
                 )}
 
                 <strong>{currency.iso_code}</strong>
@@ -90,6 +107,7 @@ function ConverterCard({
   fromCurrency,
   toCurrency,
   loadingCurrencies,
+  isConverting,
   onAmountChange,
   onFromCurrencyChange,
   onToCurrencyChange,
@@ -117,7 +135,7 @@ function ConverterCard({
           label="De"
           value={fromCurrency}
           currencies={currencies}
-          disabled={loadingCurrencies}
+          disabled={loadingCurrencies || isConverting}
           onChange={onFromCurrencyChange}
         />
 
@@ -125,7 +143,7 @@ function ConverterCard({
           label="Para"
           value={toCurrency}
           currencies={currencies}
-          disabled={loadingCurrencies}
+          disabled={loadingCurrencies || isConverting}
           onChange={onToCurrencyChange}
         />
 
@@ -134,9 +152,9 @@ function ConverterCard({
             className="convert-button"
             type="button"
             onClick={onConvert}
-            disabled={loadingCurrencies}
+            disabled={loadingCurrencies || isConverting}
           >
-            Converter
+            {isConverting ? "Convertendo..." : "Converter"}
           </button>
         </div>
       </div>

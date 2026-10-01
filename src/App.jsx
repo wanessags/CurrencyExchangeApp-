@@ -20,23 +20,18 @@ function App() {
   const { currencies, loadingCurrencies, currenciesError } = useCurrencies();
 
   const [amount, setAmount] = useState("");
-
   const [fromCurrency, setFromCurrency] = useState("BRL");
-
   const [toCurrency, setToCurrency] = useState("USD");
 
   const [convertedValue, setConvertedValue] = useState(null);
-
   const [exchangeRate, setExchangeRate] = useState(null);
 
   const [message, setMessage] = useState("");
+  const [isConverting, setIsConverting] = useState(false);
 
   const [historyData, setHistoryData] = useState([]);
-
   const [historyDays, setHistoryDays] = useState(7);
-
   const [loadingHistory, setLoadingHistory] = useState(false);
-
   const [historyError, setHistoryError] = useState("");
 
   useEffect(() => {
@@ -78,11 +73,11 @@ function App() {
       setMessage(validation.message);
       setConvertedValue(null);
       setExchangeRate(null);
-
       return;
     }
 
     try {
+      setIsConverting(true);
       setMessage("");
 
       const data = await getExchangeRate(fromCurrency, toCurrency);
@@ -100,10 +95,12 @@ function App() {
     } catch (error) {
       console.error("Erro ao converter:", error);
 
-      setMessage("Erro ao buscar cotação.");
+      setMessage("Não foi possível buscar a cotação. Tente novamente.");
 
       setConvertedValue(null);
       setExchangeRate(null);
+    } finally {
+      setIsConverting(false);
     }
   }
 
@@ -117,6 +114,7 @@ function App() {
         fromCurrency={fromCurrency}
         toCurrency={toCurrency}
         loadingCurrencies={loadingCurrencies}
+        isConverting={isConverting}
         onAmountChange={setAmount}
         onFromCurrencyChange={setFromCurrency}
         onToCurrencyChange={setToCurrency}
@@ -151,9 +149,7 @@ function App() {
         toCurrency={toCurrency}
       />
 
-      <footer id="sobre" className="footer">
-        Currency Exchange App
-      </footer>
+      <footer className="footer">Currency Exchange App</footer>
     </main>
   );
 }
