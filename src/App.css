@@ -746,4 +746,97 @@ tbody tr:hover {
   .footer {
     font-size: 15px;
   }
+
+  /* =========================
+   AJUSTES FINAIS - MOBILE
+========================= */
+
+  @media (max-width: 650px) {
+    .app {
+      padding: 24px 18px 40px;
+    }
+
+    .header {
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      width: 100%;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      font-size: 24px;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 25px;
+      line-height: 1.15;
+    }
+
+    .brand-text p {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .card,
+    .result-card {
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .card h2 {
+      font-size: 21px;
+    }
+
+    .field label {
+      font-size: 15px;
+    }
+
+    .field input,
+    .currency-select-button,
+    .convert-button {
+      height: 52px;
+    }
+
+    .field input {
+      font-size: 16px;
+    }
+
+    .currency-selected strong {
+      font-size: 16px;
+    }
+
+    .convert-button {
+      font-size: 16px;
+    }
+
+    .result-value {
+      font-size: 22px;
+      line-height: 1.3;
+    }
+
+    .chart-container {
+      min-height: 330px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    th,
+    td {
+      white-space: nowrap;
+    }
+  }
 }
